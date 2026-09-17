@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduVibe Hub Presentation</title>
+  <style>
+    :root {
+      --cream: #f7f4ee;
+      --paper: #fffdf5;
+      --ink: #153327;
+      --green: #0db47a;
+      --leaf: #58b932;
+      --gold: #f5c518;
+      --orange: #ff8500;
+      --blue: #1876d1;
+      --muted: #766f66;
+      --line: rgba(21, 51, 39, 0.13);
+      --shadow: 0 24px 70px rgba(21, 51, 39, 0.18);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Helvetica Neue", Arial, sans-serif;
+      --mono: "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 18%, rgba(245, 197, 24, 0.22), transparent 26%),
+        radial-gradient(circle at 86% 12%, rgba(13, 180, 122, 0.16), transparent 24%),
+        linear-gradient(140deg, #fffdf8 0%, var(--cream) 54%, #eef8f0 100%);
+      font-family: var(--sans);
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      isolation: isolate;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: center;
+      padding: clamp(28px, 4vw, 58px);
+      opacity: 0;
+      transform: translateX(36px) scale(0.985);
+      pointer-events: none;
+      transition: opacity 560ms ease, transform 560ms ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    .slide.prev {
+      transform: translateX(-36px) scale(0.985);
+    }
+
+    .stage {
+      width: min(1180px, 100%);
+      min-height: min(680px, calc(100vh - 116px));
+      margin: 0 auto;
+      display: grid;
+      gap: clamp(22px, 3vw, 42px);
+      align-items: center;
+    }
+
+    .two {
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+    }
+
+    .hero {
+      grid-template-columns: minmax(0, 0.8fr) minmax(380px, 1.2fr);
+    }
+
+    .kicker {
+      margin: 0 0 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    h1, h2, p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: clamp(54px, 7.4vw, 112px);
+      line-height: 0.94;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 860px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 5.4vw, 82px);
+      line-height: 1.02;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 660px;
+      margin-top: 24px;
+      font-size: clamp(18px, 1.9vw, 28px);
+      line-height: 1.38;
+      color: #425349;
+    }
+
+    .mark {
+      display: inline;
+      padding: 0 0.12em 0.05em;
+      border-radius: 5px;
+      background: var(--gold);
+      color: var(--ink);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .brand-image {
+      width: 100%;
+      aspect-ratio: 1.75 / 1;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 18px 28px rgba(18, 36, 28, 0.13));
+    }
+
+    .image-panel {
+      border: 1px solid rgba(21, 51, 39, 0.08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.74);
+      padding: clamp(18px, 2.3vw, 34px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .dark-panel {
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: clamp(30px, 4vw, 54px);
+      box-shadow: var(--shadow);
+    }
+
+    .dark-panel .kicker {
+      color: var(--gold);
+    }
+
+    .dark-panel .lead,
+    .dark-panel .muted {
+      color: rgba(255, 253, 245, 0.74);
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tile {
+      min-height: 190px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 245, 0.82);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tile strong {
+      display: block;
+      margin-bottom: 12px;
+      font-family: var(--serif);
+      font-size: clamp(23px, 2.5vw, 36px);
+      font-weight: 400;
+      line-height: 1.08;
+    }
+
+    .tile p {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #46564d;
+    }
+
+    .number {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+
+    .proof-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .proof {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255, 253, 245, 0.15);
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.4vw, 36px);
+      line-height: 1.18;
+    }
+
+    .proof::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 0.42em;
+      border-radius: 999px;
+      background: var(--gold);
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .word {
+      min-height: 170px;
+      border-radius: 8px;
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .word b {
+      font-family: var(--serif);
+      font-size: clamp(24px, 2.4vw, 34px);
+      font-weight: 400;
+    }
+
+    .word span {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .system-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .swatch {
+      min-height: 140px;
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      align-items: end;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .copy-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quote {
+      border-left: 4px solid var(--gold);
+      padding: 18px 0 18px 22px;
+      font-family: var(--serif);
+      font-size: clamp(24px, 2.8vw, 44px);
+      line-height: 1.18;
+      color: var(--ink);
+      background: linear-gradient(90deg, rgba(245, 197, 24, 0.12), transparent);
+    }
+
+    .moodboard {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr 0.9fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .pin {
+      min-height: 136px;
+      border: 1px solid rgba(21, 51, 39, 0.11);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .pin h3 {
+      margin: 0 0 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .pin p {
+      font-family: var(--serif);
+      font-size: 22px;
+      line-height: 1.28;
+    }
+
+    .pin.dark {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .pin.gold {
+      background: var(--gold);
+    }
+
+    .logo-strip {
+      grid-column: 1 / -1;
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+
+    .logo-strip img {
+      width: 100%;
+      max-height: 235px;
+      object-fit: contain;
+    }
+
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 5;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      transform: translateX(-50%);
+      padding: 8px;
+      border: 1px solid rgba(21, 51, 39, 0.11);
+      border-radius: 999px;
+      background: rgba(255, 253, 245, 0.78);
+      box-shadow: 0 12px 32px rgba(21, 51, 39, 0.13);
+      backdrop-filter: blur(18px);
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .icon-btn:hover,
+    .icon-btn:focus-visible {
+      outline: 0;
+      background: rgba(21, 51, 39, 0.09);
+    }
+
+    .counter {
+      min-width: 56px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 4px;
+      z-index: 6;
+      background: rgba(21, 51, 39, 0.1);
+    }
+
+    .bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--green), var(--blue));
+      transition: width 420ms ease;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { min-height: 100vh; height: auto; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        display: none;
+        padding: 24px 18px 88px;
+      }
+      .slide.active { display: grid; }
+      .stage,
+      .two,
+      .hero,
+      .system-grid {
+        grid-template-columns: 1fr;
+      }
+      .stage {
+        min-height: auto;
+      }
+      .tile-grid,
+      .word-grid,
+      .moodboard {
+        grid-template-columns: 1fr;
+      }
+      .word {
+        min-height: 118px;
+      }
+      .logo-strip {
+        grid-column: auto;
+      }
+      .controls {
+        width: calc(100% - 28px);
+        justify-content: space-between;
+      }
+      h1 {
+        font-size: clamp(48px, 15vw, 76px);
+      }
+      h2 {
+        font-size: clamp(38px, 12vw, 62px);
+      }
+    }
+
+    @media print {
+      body { overflow: visible; background: #fff; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        opacity: 1;
+        transform: none;
+        page-break-after: always;
+      }
+      .controls,
+      .progress {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide active">
+      <div class="stage hero">
+        <div>
+          <p class="kicker">EduVibe Hub</p>
+          <h1>Every child grows.</h1>
+          <p class="lead">Personalised 1-on-1 learning with the warmth of a tutor and the discipline of a progress system.</p>
+        </div>
+        <div class="image-panel">
+          <img class="brand-image" src="ChatGPT Image Jul 4, 2026, 12_29_46 PM.png" alt="Three EduVibe Hub logo directions">
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage two">
+        <div class="dark-panel">
+          <p class="kicker">Core belief</p>
+          <h2>Weakness is not the problem. Leaving it <span class="mark">unaddressed</span> is.</h2>
+          <p class="lead">She teaches. She watches. She finds the gap. Then she builds a plan around it with the child and the parent.</p>
+        </div>
+        <div class="stack">
+          <div class="tile">
+            <span class="number">01</span>
+            <strong>Notice the gap</strong>
+            <p>Every session is observed closely, so weak spots are named before they become permanent.</p>
+          </div>
+          <div class="tile">
+            <span class="number">02</span>
+            <strong>Work the hard thing</strong>
+            <p>Extra time is directed where the child needs it most, with patience and structure.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage">
+        <div>
+          <p class="kicker">Brand philosophy</p>
+          <h2>A collective front around the child.</h2>
+          <p class="lead">The point is not just a better lesson. It is a clearer system where tutor, child, and parent all know what is improving and what needs attention next.</p>
+        </div>
+        <div class="tile-grid">
+          <div class="tile">
+            <span class="number">See clearly</span>
+            <strong>Watch without judging</strong>
+            <p>Each child is studied with care, so the support feels personal instead of generic.</p>
+          </div>
+          <div class="tile">
+            <span class="number">Work deliberately</span>
+            <strong>Spend time where it matters</strong>
+            <p>The hard area becomes the focus, not something to avoid or rush through.</p>
+          </div>
+          <div class="tile">
+            <span class="number">Own it together</span>
+            <strong>Keep everyone aligned</strong>
+            <p>Progress becomes visible to the child, the tutor, and the parent.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage two">
+        <div>
+          <p class="kicker">What sets her apart</p>
+          <h2>She follows up. That alone is rare.</h2>
+          <p class="lead">The monthly report changes the service from a tutoring session into a visible progress relationship.</p>
+        </div>
+        <div class="dark-panel proof-list">
+          <div class="proof">End-of-month progress reports for every child and every parent.</div>
+          <div class="proof">Weakness tracking that notices patterns early.</div>
+          <div class="proof">A shared plan instead of one person guessing alone.</div>
+          <div class="proof">Clear next steps after the lesson ends.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage">
+        <div>
+          <p class="kicker">Brand personality</p>
+          <h2>Warm energy, real accountability.</h2>
+        </div>
+        <div class="word-grid">
+          <div class="word"><b>Energetic</b><span>not frantic</span></div>
+          <div class="word"><b>Firm</b><span>not cold</span></div>
+          <div class="word"><b>Attentive</b><span>not smothering</span></div>
+          <div class="word"><b>Accountable</b><span>not performative</span></div>
+          <div class="word"><b>Collective</b><span>not solo</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage system-grid">
+        <div>
+          <p class="kicker">Visual system</p>
+          <h2>Bright enough for children. Grounded enough for parents.</h2>
+          <p class="lead">The palette keeps the learning brand playful, while the deep green and classic type give it trust.</p>
+        </div>
+        <div class="swatches">
+          <div class="swatch" style="background:#153327;color:#fffdf5;">Deep green</div>
+          <div class="swatch" style="background:#f5c518;color:#153327;">Learning gold</div>
+          <div class="swatch" style="background:#0db47a;color:#073421;">Progress green</div>
+          <div class="swatch" style="background:#1876d1;color:#fffdf5;">Vibe blue</div>
+          <div class="swatch" style="background:#ff8500;color:#241000;">Energy orange</div>
+          <div class="swatch" style="background:#fffdf5;color:#153327;border:1px solid var(--line);">Warm paper</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage">
+        <div>
+          <p class="kicker">Copy that converts</p>
+          <h2>Make the parent feel the difference.</h2>
+        </div>
+        <div class="copy-stack">
+          <p class="quote">"She noticed my daughter struggled with fractions before I did."</p>
+          <p class="quote">"End of month, I got a full report. I did not expect that."</p>
+          <p class="quote">"She does not just teach. She follows up."</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="stage">
+        <div>
+          <p class="kicker">Moodboard summary</p>
+          <h2>The brand direction in one view.</h2>
+        </div>
+        <div class="moodboard">
+          <div class="pin dark">
+            <h3>Core line</h3>
+            <p>See the gap. Name it. Work on it. Own it together.</p>
+          </div>
+          <div class="pin gold">
+            <h3>Promise</h3>
+            <p>Learning that lasts because the weak spots are not ignored.</p>
+          </div>
+          <div class="pin">
+            <h3>Type</h3>
+            <p>Georgia for warmth, Helvetica for clarity, Courier for report-like precision.</p>
+          </div>
+          <div class="pin logo-strip">
+            <img src="ChatGPT Image Jul 4, 2026, 12_29_46 PM.png" alt="EduVibe Hub logo concepts">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="Presentation controls">
+    <button class="icon-btn" type="button" data-prev title="Previous slide" aria-label="Previous slide">&#8249;</button>
+    <span class="counter" aria-label="Slide count"><span data-current>1</span>/<span data-total>8</span></span>
+    <button class="icon-btn" type="button" data-next title="Next slide" aria-label="Next slide">&#8250;</button>
+    <button class="icon-btn" type="button" data-fullscreen title="Fullscreen" aria-label="Fullscreen">&#9974;</button>
+  </nav>
+  <div class="progress" aria-hidden="true"><div class="bar" data-bar></div></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const current = document.querySelector("[data-current]");
+    const total = document.querySelector("[data-total]");
+    const bar = document.querySelector("[data-bar]");
+    let index = 0;
+
+    total.textContent = String(slides.length);
+
+    function show(nextIndex) {
+      const previous = index;
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+        slide.classList.toggle("prev", i < index);
+      });
+      current.textContent = String(index + 1);
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+      if (previous !== index) {
+        history.replaceState(null, "", `#${index + 1}`);
+      }
+    }
+
+    document.querySelector("[data-prev]").addEventListener("click", () => show(index - 1));
+    document.querySelector("[data-next]").addEventListener("click", () => show(index + 1));
+    document.querySelector("[data-fullscreen]").addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        show(index + 1);
+      }
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        show(index - 1);
+      }
+      if (event.key === "Home") show(0);
+      if (event.key === "End") show(slides.length - 1);
+    });
+
+    const initial = Number(location.hash.replace("#", ""));
+    show(Number.isFinite(initial) && initial > 0 ? initial - 1 : 0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Georgia, 'Times New Roman', serif; background: #F7F4EE; }
+.sr-only { position: absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
+.board {
+  background: #F7F4EE;
+  padding: 24px 20px 36px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.9fr;
+  gap: 12px;
+}
+
+.pin { background: #fff; border-radius: 3px; overflow: hidden; border: 0.5px solid #E0DAD0; }
+
+.label {
+  font-family: 'Courier New', monospace;
+  font-size: 9px; color: #9A9080;
+  text-transform: uppercase; letter-spacing: .09em;
+  padding: 6px 10px 5px;
+  border-bottom: 0.5px solid #F0EBE0;
+}
+
+.headline-pin {
+  grid-column: 1; grid-row: 1;
+  background: #1A3A2A;
+  padding: 26px 22px;
+  min-height: 190px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.h-kicker { font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #0DB47A; margin-bottom: 14px; }
+.h-h1 { font-family: Georgia, serif; font-size: 21px; font-weight: 400; color: #FFFDF5; line-height: 1.25; }
+.h-h1 em { font-style: normal; background: #F5C518; color: #1A3A2A; padding: 1px 6px; border-radius: 2px; }
+.h-sub { margin-top: 14px; font-family: 'Courier New', monospace; font-size: 9px; color: rgba(255,255,255,.35); line-height: 1.7; }
+
+.logo-pin {
+  grid-column: 2; grid-row: 1;
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 16px; justify-content: center;
+  min-height: 190px;
+}
+.logo-option { display: flex; flex-direction: column; align-items: flex-start; }
+.logo-option + .logo-option { padding-top: 14px; border-top: 0.5px solid #F0EBE0; }
+.logo-tag { font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: .09em; text-transform: uppercase; color: #B0A898; margin-bottom: 8px; }
+
+.texture-pin {
+  grid-column: 3; grid-row: 1;
+  background: #F5C518;
+  min-height: 190px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 16px 14px;
+  position: relative; overflow: hidden;
+}
+.tex-bg-text {
+  position: absolute; top: -10px; left: -8px;
+  font-family: Georgia, serif; font-size: 90px; font-weight: 400;
+  color: rgba(26,58,42,.08); line-height: 1; pointer-events: none;
+  user-select: none;
+}
+.tex-words { position: relative; z-index: 1; }
+.tex-word { font-family: Georgia, serif; font-size: 13px; color: #1A3A2A; line-height: 1.7; }
+.tex-word em { font-style: italic; color: #2D6148; }
+
+.philosophy-pin {
+  grid-column: 1; grid-row: 2;
+  padding: 16px 14px;
+  background: #FFFDF5;
+}
+.ph-kicker { font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #9A9080; margin-bottom: 10px; }
+.ph-quote { font-family: Georgia, serif; font-size: 13px; color: #1A3A2A; line-height: 1.7; font-style: italic; }
+.ph-three { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 12px; }
+.ph-item { border-left: 2px solid #F5C518; padding: 6px 10px; background: #F9F6EF; border-radius: 0 3px 3px 0; }
+.ph-item-label { font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: #0DB47A; margin-bottom: 3px; }
+.ph-item-text { font-family: Georgia, serif; font-size: 11px; color: #3A4A3E; line-height: 1.55; }
+
+.feeling-pin {
+  grid-column: 2; grid-row: 2;
+  padding: 14px 12px;
+}
+.feeling-word { display: flex; align-items: baseline; gap: 6px; padding: 7px 0; border-bottom: 0.5px solid #F0EBE0; }
+.feeling-word:last-child { border-bottom: none; }
+.fw-num { font-family: 'Courier New', monospace; font-size: 8px; color: #C8BFB0; width: 14px; }
+.fw-text { font-family: Georgia, serif; font-size: 14px; color: #1A3A2A; flex: 1; }
+.fw-opp { font-family: 'Courier New', monospace; font-size: 8px; color: #B0A898; }
+
+.report-pin {
+  grid-column: 3; grid-row: 2;
+  padding: 14px 12px;
+  background: #1A3A2A;
+}
+.rp-label { font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 10px; }
+.rp-item { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-start; }
+.rp-dot { width: 6px; height: 6px; border-radius: 50%; background: #F5C518; margin-top: 5px; flex-shrink: 0; }
+.rp-text { font-family: Georgia, serif; font-size: 11px; color: rgba(255,255,255,.75); line-height: 1.6; }
+.rp-text em { font-style: normal; color: #0DB47A; }
+
+.type-pin {
+  grid-column: 1 / 3; grid-row: 3;
+  padding: 16px 14px;
+}
+.type-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.type-specimen { }
+.type-role { font-family: 'Courier New', monospace; font-size: 8px; color: #B0A898; margin-bottom: 5px; letter-spacing: .06em; text-transform: uppercase; }
+.type-display { font-family: Georgia, serif; font-size: 18px; color: #1A3A2A; line-height: 1.25; }
+.type-body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; color: #4A5568; line-height: 1.7; }
+.type-mono { font-family: 'Courier New', monospace; font-size: 10px; color: #0DB47A; letter-spacing: .04em; }
+.type-highlight { background: #F5C518; color: #1A3A2A; padding: 0 4px; border-radius: 2px; font-style: normal; font-family: Georgia, serif; font-size: 18px; }
+
+.copy-pin {
+  grid-column: 3; grid-row: 3;
+  padding: 14px 12px;
+  background: #F9F6EF;
+}
+.copy-label { font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: .09em; text-transform: uppercase; color: #9A9080; margin-bottom: 8px; }
+.copy-line { font-family: Georgia, serif; font-size: 11px; color: #1A3A2A; line-height: 1.65; padding: 5px 0; border-bottom: 0.5px solid #E8E2D8; }
+.copy-line:last-child { border-bottom: none; }
+.copy-line span { color: #0DB47A; }
+</style>
+
+<h2 class="sr-only">EduVibe Hub moodboard version 2 — updated with collective progress philosophy, report-giving persona, child-energy logo concepts, and full brand tone</h2>
+
+<div class="board">
+
+  <div class="pin headline-pin">
+    <div class="h-kicker">Core belief — every child</div>
+    <div class="h-h1">Weakness isn't the problem.<br>Leaving it <em>unaddressed</em> is.</div>
+    <div class="h-sub">
+      She teaches. She watches. She finds the gap.<br>
+      Then she builds a plan around it — together<br>
+      with the child, and the parent.
+    </div>
+  </div>
+
+  <div class="pin logo-pin">
+    <div class="label">Logo directions — child energy</div>
+
+    <div class="logo-option">
+      <div class="logo-tag">Direction A — illustrated mark</div>
+      <svg width="200" height="44" viewBox="0 0 200 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="6" width="32" height="32" rx="8" fill="#F5C518"/>
+        <circle cx="10" cy="18" r="3" fill="#1A3A2A"/>
+        <circle cx="22" cy="18" r="3" fill="#1A3A2A"/>
+        <path d="M8 26 Q16 32 24 26" stroke="#1A3A2A" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="28" cy="8" r="4" fill="#0DB47A"/>
+        <path d="M28 4 L28 1 M32 6 L34 4 M28 12 L28 14" stroke="#0DB47A" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="42" y="20" font-family="Georgia, serif" font-size="15" fill="#1A3A2A">EduVibe</text>
+        <text x="42" y="35" font-family="'Courier New', monospace" font-size="9" fill="#0DB47A" letter-spacing="1">HUB</text>
+      </svg>
+    </div>
+
+    <div class="logo-option">
+      <div class="logo-tag">Direction B — pencil + spark</div>
+      <svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="8" width="7" height="22" rx="3.5" fill="#1A3A2A"/>
+        <polygon points="0,30 7,30 3.5,38" fill="#F5C518"/>
+        <rect x="0" y="6" width="7" height="5" rx="2" fill="#0DB47A"/>
+        <path d="M14 20 L18 12 L22 20 L26 8 L30 20" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="38" y="23" font-family="Georgia, serif" font-size="16" fill="#1A3A2A">EduVibeHub</text>
+      </svg>
+    </div>
+
+    <div class="logo-option">
+      <div class="logo-tag">Direction C — growth arc</div>
+      <svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="30" r="5" fill="#F5C518"/>
+        <circle cx="20" cy="24" r="6" fill="#0DB47A"/>
+        <circle cx="33" cy="16" r="7" fill="#1A3A2A"/>
+        <path d="M8 30 Q20 10 33 16" stroke="#F5C518" stroke-width="1.5" stroke-linecap="round" fill="none" stroke-dasharray="3 2"/>
+        <text x="46" y="19" font-family="Georgia, serif" font-size="15" fill="#1A3A2A">EduVibeHub</text>
+        <text x="46" y="31" font-family="'Courier New', monospace" font-size="8" fill="#9A9080" letter-spacing="0.5">every child grows</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="pin texture-pin">
+    <div class="tex-bg-text">E</div>
+    <div class="tex-words">
+      <div class="tex-word">See the <em>gap.</em></div>
+      <div class="tex-word">Name it.</div>
+      <div class="tex-word">Work on it.</div>
+      <div class="tex-word"><em>Own it — together.</em></div>
+    </div>
+  </div>
+
+  <div class="pin philosophy-pin">
+    <div class="ph-kicker">Brand philosophy</div>
+    <div class="ph-quote">"Every child has a weakness. That's not a failure — that's a place to begin. All it takes is a little extra time, a little extra attention, and the right person in the room."</div>
+    <div class="ph-three">
+      <div class="ph-item">
+        <div class="ph-item-label">See clearly</div>
+        <div class="ph-item-text">She watches every session and tracks where each child slows down — not to judge, but to know.</div>
+      </div>
+      <div class="ph-item">
+        <div class="ph-item-label">Work deliberately</div>
+        <div class="ph-item-text">Extra time on the hard thing. Not punishing it — patiently dismantling it.</div>
+      </div>
+      <div class="ph-item">
+        <div class="ph-item-label">Own it together</div>
+        <div class="ph-item-text">Child, tutor, parent — all aligned. That's the collective front she builds.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pin feeling-pin">
+    <div class="label">Brand personality</div>
+    <div class="feeling-word">
+      <span class="fw-num">01</span>
+      <span class="fw-text">Energetic</span>
+      <span class="fw-opp">not frantic</span>
+    </div>
+    <div class="feeling-word">
+      <span class="fw-num">02</span>
+      <span class="fw-text">Firm</span>
+      <span class="fw-opp">not cold</span>
+    </div>
+    <div class="feeling-word">
+      <span class="fw-num">03</span>
+      <span class="fw-text">Attentive</span>
+      <span class="fw-opp">not smothering</span>
+    </div>
+    <div class="feeling-word">
+      <span class="fw-num">04</span>
+      <span class="fw-text">Accountable</span>
+      <span class="fw-opp">not performative</span>
+    </div>
+    <div class="feeling-word">
+      <span class="fw-num">05</span>
+      <span class="fw-text">Collective</span>
+      <span class="fw-opp">not solo</span>
+    </div>
+  </div>
+
+  <div class="pin report-pin">
+    <div class="rp-label">What sets her apart</div>
+    <div class="rp-item">
+      <div class="rp-dot"></div>
+      <div class="rp-text">End-of-month <em>progress reports</em> — every child, every parent</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-dot"></div>
+      <div class="rp-text">Weakness tracking — she notices before the parent does</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-dot"></div>
+      <div class="rp-text">Collective front — child + tutor + parent aligned</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-dot"></div>
+      <div class="rp-text"><em>She follows up.</em> That alone is rare.</div>
+    </div>
+  </div>
+
+  <div class="pin type-pin">
+    <div class="label">Typography system</div>
+    <div class="type-row">
+      <div class="type-specimen">
+        <div class="type-role">Display — Georgia</div>
+        <div class="type-display">Learning that <i class="type-highlight">lasts.</i></div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-role">Body — Helvetica</div>
+        <div class="type-body">Personalised 1-on-1 sessions in Maths, Literacy and Science — built around how your child actually learns.</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-role">Label — Courier</div>
+        <div class="type-mono">Ages 3–12<br>Online · 1-on-1<br>Monthly reports</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pin copy-pin">
+    <div class="copy-label">Copy that converts</div>
+    <div class="copy-line">"She <span>noticed</span> my daughter struggled with fractions before I did."</div>
+    <div class="copy-line">"End of month, I got a full report. I didn't expect that."</div>
+    <div class="copy-line">"She doesn't just teach — she <span>follows up.</span>"</div>
+    <div class="copy-line">"My son went from avoiding maths to asking for it."</div>
+  </div>
+
+</div>

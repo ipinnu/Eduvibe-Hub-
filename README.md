@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduVibe Hub
 
-## Getting Started
+Marketing site and tutor portal build for EduVibe Hub by BrainBox Studios.
 
-First, run the development server:
+## Active Product Document
+
+The current portal direction and next build plan are maintained in:
+
+- [docs/portal-spec.md](docs/portal-spec.md)
+
+This is a living document. Update it as product decisions change, blockers are resolved, or the next implementation plan changes. It contains the working decisions for roles, Supabase Auth, Google Calendar/Meet integration, Tldraw lesson board, Supabase Realtime sync, reports, store, and open questions.
+
+## Current Public Site Routes
+
+- `/`
+- `/subjects`
+- `/how-it-works`
+- `/about`
+- `/store`
+
+## Portal Direction
+
+Implemented portal routes:
+
+- `/portal`
+- `/portal/login`
+- `/portal/forgot-password`
+- `/portal/reset-password`
+- `/portal/admin`
+- `/portal/tutor`
+- `/portal/parent`
+- `/portal/student`
+- `/portal/students`
+- `/portal/sessions`
+- `/portal/homework`
+- `/portal/curriculum`
+- `/portal/reviews`
+- `/portal/reports`
+- `/portal/notifications`
+- `/portal/lesson-board/[sessionId]`
+- `/portal/store`
+- `/portal/access`
+- `/portal/settings`
+
+The Supabase schema and RLS policies are in `supabase/migrations/`. Apply both migrations in filename order before using authenticated store publishing or live portal data.
+
+Portal authentication reads the current `profiles.role` on protected requests. Role changes in Supabase take effect on refresh or the next navigation. Production account invitations require the server-only `SUPABASE_SERVICE_ROLE_KEY` and a public `NEXT_PUBLIC_SITE_URL` (for example `https://eduvibehub.com.ng`). In the Supabase dashboard, set Authentication → URL Configuration → Site URL to that same origin and allow `https://eduvibehub.com.ng/auth/callback` under Redirect URLs; otherwise invite emails fall back to localhost.
+
+Google Calendar/Meet requires the Google OAuth variables in `.env.example`. Google tokens are AES-GCM encrypted before database storage. Resend email is optional: in-app notifications still work without `RESEND_API_KEY`.
+
+The website does not process payments. Store posts contain an editable external checkout URL and currently point to Selar.
+
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx tsc --noEmit
+npm run lint
+npm run build
+```
