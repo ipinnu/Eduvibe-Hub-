@@ -29,6 +29,10 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
+  icons: {
+    icon: [{ url: "/Logo V2.png", type: "image/png" }],
+    apple: "/Logo V2.png",
+  },
   title: {
     default: "EduVibe Hub | Online Tutoring in Nigeria for Children",
     template: "%s | EduVibe Hub",
